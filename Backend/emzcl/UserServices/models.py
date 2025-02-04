@@ -149,7 +149,7 @@ class Users(AbstractUser):
     ('BDT', 'BDT'),  
     ('NGN', 'NGN'), 
     ('KES', 'KES')))
-    domain_user_id = models.CharField(max_length=50,  blank=True, null=True)
+    domain_user_id = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     domain_name = models.CharField(max_length=50,blank=True, null=True)
     plan_type = models.CharField(max_length=50,blank=True, null=True, choices=(('free', 'Free'),
     ('basic', 'Basic'),
@@ -189,6 +189,7 @@ class Modules(models.Model):
     is_active= models.BooleanField(default=True)
     module_url = models.TextField()
     parent_id=models.ForeignKey('self',on_delete=models.CASCADE, blank=True,null=True)
+    display_order = models.IntegerField(default=0)
     module_description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
