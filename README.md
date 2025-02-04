@@ -1,0 +1,2 @@
+# amzcl
+clone amazone
