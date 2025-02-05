@@ -10,16 +10,16 @@ class Users(AbstractUser):
     state = models.CharField(max_length=50, blank=True, null=True)
     pincode = models.CharField(max_length=10, blank=True, null=True)
     country = models.CharField(max_length=50, blank=True, null=True, choices=(('VN', 'Vietnam'),
-    ('US', 'United States'),
-    ('UK', 'United Kingdom'),
-    ('FR', 'France'),
-    ('DE', 'Germany'),
-    ('JP', 'Japan'),
-    ('KR', 'South Korea'),
-    ('CN', 'China'),
-    ('RU', 'Russia'),
-    ('BR', 'Brazil'),
-    ('VN','Viet Nam')))
+    ('US', 'US'),
+    ('GB', 'GB'),
+    ('FR', 'FR'),
+    ('DE', 'DE'),
+    ('JP', 'JP'),
+    ('KR', 'KR'),
+    ('CN', 'CN'),
+    ('RU', 'RU'),
+    ('BR', 'BR'),
+    ('VN', 'VN')))
     profile_pic= models.ImageField(upload_to='profile_pic./', blank=True, null=True)
     account_status = models.CharField(max_length=50, blank=True, null=True, choices=(('Active', 'Active'),
         ('Inactive', 'Inactive'),
@@ -38,7 +38,7 @@ class Users(AbstractUser):
     addition_details = models.JSONField( blank=True, null=True)
     language = models.CharField(max_length=50,  blank=True, null=True, choices=( ('en', 'English'),
         ('vi', 'Vietnamese'),
-        ('Us','English')
+        ('us','English'),
         ('fr', 'French'),
         ('es', 'Spanish'),
         ('de', 'German'),
@@ -108,7 +108,7 @@ class Users(AbstractUser):
     ('UTC+14:00', 'UTC+14:00')))
     last_login = models.DateTimeField( blank=True, null=True)
     last_device = models.GenericIPAddressField(max_length=50, blank=True, null=True)
-    last_ip = models.CharField( blank=True, null=True)
+    last_ip = models.CharField(max_length=255, blank=True, null=True)
     currency = models.CharField(max_length=50, blank=True, null=True,choices=( ('USD', 'USD'),  # Đô la Mỹ
     ('EUR', 'EUR'), 
     ('JPY', 'JPY'), 
@@ -149,7 +149,7 @@ class Users(AbstractUser):
     ('BDT', 'BDT'),  
     ('NGN', 'NGN'), 
     ('KES', 'KES')))
-    domain_user_id = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
+    domain_user_id = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='domain_user_id_user')
     domain_name = models.CharField(max_length=50,blank=True, null=True)
     plan_type = models.CharField(max_length=50,blank=True, null=True, choices=(('free', 'Free'),
     ('basic', 'Basic'),
@@ -196,7 +196,7 @@ class Modules(models.Model):
 
 class UserPermissions(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='user_permissions_1')
     module = models.ForeignKey(Modules, on_delete=models.CASCADE)
     is_view = models.BooleanField(default=False)
     is_add = models.BooleanField(default=False)
