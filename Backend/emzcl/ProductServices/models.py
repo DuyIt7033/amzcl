@@ -43,5 +43,24 @@ class Products(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class ProductQuestion(models.Model):
+class ProductQuestions(models.Model):
+    id = models.AutoField(primary_key=True)
+    question = models.TextField()
+    answer = models.TextField()
+    status = models.CharField(max_length=255, choices=[('ACTIVE','ACTIVE'),('INACTIVE','INACTIVE')], default='ACTIVE')
+    product_id = models.ForeignKey(Products, on_delete=models.CASCADE, blank=True, null=True, related_name='product_id')
+    domain_user_id = models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='domain_user_id')
+    question_user_id =  models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='added_by_user_id')
+    answer_user_id =  models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='added_by_user_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
+class ProductReviews(models.Model):
+    id = models.AutoField(primary_key=True)
+    review_image = models.JSONField()
+    rating = models.FloatField()
+    reviews = models.TextField()
+    status = models.CharField(max_length=255, choices=[('ACTIVE','ACTIVE'),('INACTIVE','INACTIVE')], default='ACTIVE')
+    product_id = models.ForeignKey(Products, on_delete=models.CASCADE, blank=True, null=True, related_name='product_id')
+    domain_user_id = models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='domain_user_id')
+    review_user_id = models.ForeignKey(Users, on_delete=models.CASCADE, blank=True, null=True, related_name='review_user_id')
