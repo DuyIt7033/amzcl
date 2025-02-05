@@ -57,10 +57,10 @@ class ProductQuestions(models.Model):
     
 class ProductReviews(models.Model):
     id = models.AutoField(primary_key=True)
-    review_image = models.JSONField()
+    review_images = models.JSONField()
     rating = models.FloatField()
     reviews = models.TextField()
     status = models.CharField(max_length=255, choices=[('ACTIVE','ACTIVE'),('INACTIVE','INACTIVE')], default='ACTIVE')
     product_id = models.ForeignKey(Products, on_delete=models.CASCADE, blank=True, null=True, related_name='product_id')
     domain_user_id = models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='domain_user_id')
-    review_user_id = models.ForeignKey(Users, on_delete=models.CASCADE, blank=True, null=True, related_name='review_user_id')
+    review_user_id = models.ForeignKey(Users, on_delete=models.CASCADE, blank=True, null=True, related_name='added_by_user_id')

@@ -1,3 +1,37 @@
 from django.db import models
-
-# Create your models here.
+from UserServices.models import Users
+from InventoryServices.models import Warehouse
+class PurchaseOrder(models.Model):
+    id = models.AutoField(primary_key=True)
+    warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE, blank=True, null=True, related_name=' warehouse_id')
+    supplier_id = models.ForeignKey(Users, on_delete=models.CASCADE, blank=True, null=True, related_name='supplier_id')
+    last_updated_by_user_id = models.ForeignKey(Users, on_delete=models.CASCADE, blank=True, null=True, related_name='last_updated_by_user_id')
+    po_code = models.CharField(max_length=255)
+    po_date = models.DateTimeField()
+    excepted_delivery_date = models.DateTimeField()
+    payment_terms = models.CharField(max_length=255, choices=[('CASH','CASH'),('CREDIT','CREDIT'),('ONLINE','ONLINE'),('CHEQUE','CHEQUE') ],default='CASH')
+    payment_status = models.CharField(max_length=255, choices=[('PAID','PAID'),('UNPAID','UNPAID'),('PARTIAL PAID','PARTIAL PAID'),('CANCELLED','CANCELLED')],default='UNPAID')
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    paid_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    due_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    discount_type = models.CharField(max_length=255, choices=[('PERCENTAGE','PERCENTAGE'),('AMOUNT','AMOUNT')], default='PERCENTAGE')
+    shipping_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping_type =  models.CharField(max_length=255, choices=[('FREE','FREE'),('PAID','PAID')], default='FREE')
+    shipping_tax_percentage = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping_cancelled_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping_cancelled_tax_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    additional_details = models.JSONField()
+    status = models.CharField(max_length=255, choices=[('DRAFT','DRAFT'),('SENT','SENT'),('RECEIVED','RECEIVED'),('PARTIAL RECEIVED','PARTIAL RECEIVED'),('CANCELLED','CANCELLED'),('RETURNED','RETURNED')], default='DRAFT')
+    create_by_user_id =  models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='create_by_user_id')
+    domain_user_id = models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='domain_user_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    approve_by_user_id =  models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='approve_by_user_id')
+    approve_at = models.DateTimeField()
+    cancelled_by_user_id =  models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='cancelled_by_user_id')
+    cancelled_at = models.DateTimeField()
+    cancelled_reason = models.TextField()
+    received_by_user_id =  models.ForeignKey(Users, on_delete=models.CASCADE,  blank=True, null=True, related_name='received_by_user_id')
+    received_at = models.DateTimeField()
+    
