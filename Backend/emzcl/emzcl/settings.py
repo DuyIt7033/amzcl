@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'ProductServices',
     'InventoryServices',
     'OrderServices',
+    'rest_framework',
+    'rest_framework_simplejwt',
+   
+    
 ]
 
 MIDDLEWARE = [
@@ -133,3 +137,31 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'UserServices.Users'
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Access Token có hiệu lực 1 ngày
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Refresh Token có hiệu lực 1 ngày
+    'ROTATE_REFRESH_TOKENS': False,  # Không tự động cấp Refresh Token mới
+    'BLACKLIST_AFTER_ROTATION': False,  # Không vô hiệu hóa Refresh Token cũ sau khi làm mới
+    'UPDATE_LAST_LOGIN': False,  # Không cập nhật trường last_login khi đăng nhập bằng JWT
+    'ALGORITHM': 'HS256',  # Thuật toán mã hóa JWT
+    'VERIFYING_KEY': None,  # Chỉ cần thiết nếu dùng thuật toán bất đối xứng như RS256
+    'SIGNING_KEY': SECRET_KEY,  # Dùng SECRET_KEY của Django để ký JWT
+    'AUTH_HEADER_TYPES': ('Bearer',),  # Tiền tố trong Header Authorization
+    'USER_ID_FIELD': 'id',  # Trường xác định user trong DB
+    'USER_ID_CLAIM': 'user_id',  # Thông tin user_id trong payload của JWT
+    'TOKEN_ID_CLAIM': 'token_type',
+    'JTI_CLAIM': 'jti',  # Claim giúp xác định token duy nhất
+
+    'AUTH_TOKEN_CLASSES': (
+    'rest_framework_simplejwt.tokens.AccessToken',
+    ),
+    # Sliding Token 
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM':'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),  # Token có hiệu lực 5 phút
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),  # Token có thể được làm mới trong 1 ngày
+}
+
+

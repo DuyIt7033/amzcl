@@ -20,7 +20,6 @@ class Users(AbstractUser):
     ('RU', 'RU'),
     ('BR', 'BR'),
     ('VN', 'VN')))
-    profile_pic= models.ImageField(upload_to='profile_pic./', blank=True, null=True)
     account_status = models.CharField(max_length=50, blank=True, null=True, choices=(('Active', 'Active'),
         ('Inactive', 'Inactive'),
         ('Blocked', 'Blocked')))
@@ -32,8 +31,9 @@ class Users(AbstractUser):
     dob = models.DateField( blank=True, null=True)
 
     username = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-
+    password = models.CharField(max_length=255)
+    profile_pic= models.ImageField(upload_to='profile_pic/', blank=True, null=True)
+   
     social_media_links = models.JSONField( blank=True, null=True)
     addition_details = models.JSONField( blank=True, null=True)
     language = models.CharField(max_length=50,  blank=True, null=True, choices=( ('en', 'English'),
