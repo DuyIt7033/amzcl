@@ -79,10 +79,16 @@ WSGI_APPLICATION = 'emzcl.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # Sử dụng MySQL
+        'NAME': 'amzcl',                      # Tên database đã tạo
+        'USER': 'root',                        # Tên user MySQL (mặc định là 'root' nếu dùng local)
+        'PASSWORD': '',                         # Mật khẩu của user MySQL (nếu có)
+        'HOST': 'localhost',                    # Nếu MySQL chạy trên máy local, để 'localhost'
+        'PORT': '3306',                         # Cổng mặc định của MySQL là 3306
     }
 }
+
+
 
 
 # Password validation
