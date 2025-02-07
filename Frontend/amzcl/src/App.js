@@ -1,25 +1,26 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Layout from './utils/Layout';
+import AuthScreen from './pages/AuthScreen';
+import Home from './pages/Home';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'; // ✅ Đúng
+import 'react-toastify/dist/ReactToastify.css';
+
+
+const router = createBrowserRouter([
+  { path: "/", element: <AuthScreen /> },
+  { path: "/home", element: <Home /> }
+]);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    
+    <Layout>
+      <RouterProvider router={router}/>
+
+    </Layout>
+    
+  )
 }
 
 export default App;
