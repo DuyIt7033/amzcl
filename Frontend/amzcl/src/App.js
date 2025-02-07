@@ -5,11 +5,12 @@ import AuthScreen from './pages/AuthScreen';
 import Home from './pages/Home';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'; // ✅ Đúng
 import 'react-toastify/dist/ReactToastify.css';
+import ProtectedRoute from './utils/ProtectedRoute';
 
 
 const router = createBrowserRouter([
   { path: "/", element: <AuthScreen /> },
-  { path: "/home", element: <Home /> }
+  { path: "/home", element: <ProtectedRoute element={<Home/>}/>},
 ]);
 
 function App() {
