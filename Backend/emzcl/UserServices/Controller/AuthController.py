@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate
 from UserServices.models import Users  
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from emzcl.Helpers import renderResponse
 class SignupAPIView(APIView):
     def post(self, request):
         username = request.data.get('username')  # Thay 'username' bằng chuỗi
@@ -17,15 +17,15 @@ class SignupAPIView(APIView):
 
         emailCheck = Users.objects.filter(email=email)
         if emailCheck.exists():
-            return Response({'error': 'Email Already Exists'}, status=status.HTTP_400_BAD_REQUEST)
+            return renderResponse(data = 'Email Already Exists',message ='Email Already Exists', status=status.HTTP_400_BAD_REQUEST)
 
         usernameCheck = Users.objects.filter(username=username)
         if usernameCheck.exists():
-            return Response({'error': 'User name Already Exists'}, status=status.HTTP_400_BAD_REQUEST)
+            return renderResponse(data = 'Username Already Exists',message ='Username Already Exists', status=status.HTTP_400_BAD_REQUEST)
 
 
         if username is None or email is None or password is None:
-            return Response({'error': 'Xin hãy điền đủ thông tin'}, status=status.HTTP_400_BAD_REQUEST)
+            return renderResponse(data = 'Please fill in all information',message='Please fill in all information', status=status.HTTP_400_BAD_REQUEST)
 
         user = Users.objects.create_user(username=username, email=email, password=password, profile_pic=profile_pic)
         if request.data.get('domain_user_id_id'):
@@ -50,7 +50,7 @@ class LoginAPIView(APIView):
 
         # Kiểm tra dữ liệu
         if username is None or password is None:
-            return Response({'error': 'Vui lòng nhập đầy đủ username và password.'}, status=status.HTTP_400_BAD_REQUEST)
+            return renderResponse(data = 'Please fill in all information',message='Please fill in all information', status=status.HTTP_400_BAD_REQUEST)
         
         # Xác thực người dùng
         user = authenticate(request, username=username, password=password)
@@ -69,20 +69,20 @@ class LoginAPIView(APIView):
                 'access': str(access),  
             })
         else:
-            return Response({'error': 'Tên đăng nhập hoặc mật khẩu không đúng.'}, status=status.HTTP_401_UNAUTHORIZED)
+            return renderResponse(data = 'Username or password is incorrect',message='Username or password is incorrect ', status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
-        return Response({'message':'Dùng Post để login'})
+        return renderResponse(data = 'Please use post method to login',message=' Please use post method to login', status=status.HTTP_400_BAD_REQUEST)
 
 # API công khai (không yêu cầu đăng nhập)
 class PublicAPIView(APIView):
     def get(self, request):
-        return Response({"message": "Đây là API công khai, ai cũng có thể truy cập."})
+        return renderResponse(data ='Puclic Api',message='Puclic Api', status=status.HTTP_400_BAD_REQUEST)
 
 # API yêu cầu JWT Token
 class ProtectedAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Yêu cầu xác thực bằng JWT
     authentication_classes =  [JWTAuthentication]
     def get(self, request):
-        return Response({"message": f"Chào {request.user.username}, bạn đã xác thực thành công!"})
+        return renderResponse(data = 'This is protected API. You can access if your authentication is successful',message='Please fill in all information', status=status.HTTP_400_BAD_REQUEST)
 
