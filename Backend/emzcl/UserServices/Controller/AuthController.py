@@ -7,6 +7,8 @@ from UserServices.models import Users
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from emzcl.Helpers import renderResponse
+from emzcl.permission import IsSuperAdmin
+
 class SignupAPIView(APIView):
     def post(self, request):
         username = request.data.get('username')  # Thay 'username' bằng chuỗi
@@ -84,5 +86,15 @@ class ProtectedAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Yêu cầu xác thực bằng JWT
     authentication_classes =  [JWTAuthentication]
     def get(self, request):
-        return renderResponse(data = 'This is protected API. You can access if your authentication is successful',message='Please fill in all information', status=status.HTTP_400_BAD_REQUEST)
+        return renderResponse(data ='This is protected API. You can access if your authentication is successful',message='This is protected API. You can access if your authentication is successful', status=status.HTTP_400_BAD_REQUEST)
 
+class SuperAdminCheckAPI(APIView):
+    authentication_classes = [JWTAuthentication]  # Chỉ cần xác thực bằng JWT
+    permission_classes = [IsAuthenticated, IsSuperAdmin]  # Sau khi xác thực, kiểm tra quyền
+
+    def get(self, request):
+        return renderResponse(
+            data='This is Super Admin API. You can access if your authentication is successful',
+            message='This is Super Admin API. You can access if your authentication is successful',
+            status=status.HTTP_200_OK  # Trả về mã trạng thái 200 OK khi thành công
+        )

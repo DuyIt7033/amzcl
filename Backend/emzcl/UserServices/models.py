@@ -27,7 +27,8 @@ class Users(AbstractUser):
         ('User', 'User'),
         ('Supplier', 'Supplier'),
         ('Staff', 'Staff'),
-        ('Manager', 'Manager')))
+        ('Manager', 'Manager'),
+        ('Super Admin', 'Super Admin')))
     dob = models.DateField( blank=True, null=True)
 
     username = models.CharField(max_length=50, unique=True)
