@@ -14,10 +14,23 @@ class SignupAPIView(APIView):
         password = request.data.get('password')  # Thay 'password' bằng chuỗi
         profile_pic = request.FILES.get('profile_pic')  # Lấy file ảnh từ request.FILES
         
+
+        emailCheck = Users.objects.filter(email=email)
+        if emailCheck.exists():
+            return Response({'error': 'Email Already Exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        usernameCheck = Users.objects.filter(username=username)
+        if usernameCheck.exists():
+            return Response({'error': 'User name Already Exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+
         if username is None or email is None or password is None:
             return Response({'error': 'Xin hãy điền đủ thông tin'}, status=status.HTTP_400_BAD_REQUEST)
 
         user = Users.objects.create_user(username=username, email=email, password=password, profile_pic=profile_pic)
+        if request.data.get('domain_user_id_id'):
+            user.domain_user_id= Users.objects.get(id=request.data.get('domain_user_id_id'))
+
         user.save()
         refresh = RefreshToken.for_user(user)
         access = refresh.access_token
